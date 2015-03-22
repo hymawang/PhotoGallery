@@ -1,0 +1,22 @@
+# Codeception Test Suite Configuration
+
+# suite for acceptance tests.
+# perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser
+        - AcceptanceHelper
+        - Db  
+    config:
+        PhpBrowser:
+            url: 'http://localhost/PhotoGallery/index-test.php'
+        Db:
+            dsn: 'mysql:host=localhost;dbname=photogallery_tests'
+            user: 'root'
+            password: ''
+            dump: 'tests/_data/dump.sql'
+            populate: true
+            cleanup: false

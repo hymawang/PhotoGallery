@@ -8,6 +8,9 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\SignupForm;
+use app\models\User;
+
 
 class SiteController extends Controller
 {
@@ -16,11 +19,16 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout','login', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
+                        'actions' => ['login', 'signup'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -46,12 +54,14 @@ class SiteController extends Controller
             ],
         ];
     }
-
+    
     public function actionIndex()
     {
-        return $this->render('index');
+        $this->redirect("photos/index");
     }
 
+    
+    
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
@@ -75,6 +85,23 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+    
+    
     public function actionContact()
     {
         $model = new ContactForm();

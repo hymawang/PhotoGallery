@@ -3,8 +3,9 @@
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-    'id' => 'basic',
+    'id' => 'photo_gallery',
     'basePath' => dirname(__DIR__),
+    'defaultRoute' => 'photos/index',
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
@@ -38,6 +39,14 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'urlManager' => [
+            'enablePrettyUrl' => false,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => [
+                // ...
+            ],
+        ],
     ],
     'params' => $params,
 ];
